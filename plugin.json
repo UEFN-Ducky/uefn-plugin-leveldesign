@@ -1,0 +1,89 @@
+{
+  "id": "leveldesign",
+  "kind": "plugin",
+  "version": "1.0.15",
+  "label": "UEFN Level Design",
+  "description": "Spatial layout, per-area landscapes, blockout presets, worldgen, foliage, PCG, Fort actors. Bundles the leveldesign skill.",
+  "min_app_version": "1.0.0",
+  "default_enabled": true,
+  "secret_keys": [],
+  "contributes": {
+    "agent.tools": {
+      "category": "leveldesign",
+      "tools": [
+        "get_actor_bounds",
+        "get_actor_bone_transform",
+        "get_level_bounds",
+        "measure_distance",
+        "check_area_clear",
+        "find_clear_area",
+        "get_ground_z",
+        "snap_actor_to_ground",
+        "snap_actor_to_grid",
+        "align_actors",
+        "distribute_actors",
+        "area_list",
+        "area_create",
+        "blockout_list_presets",
+        "blockout_layout",
+        "worldgen_capabilities",
+        "terrain_generate",
+        "terrain_get_info",
+        "terrain_remove_generated",
+        "foliage_list_sources",
+        "foliage_scatter",
+        "foliage_get_stats",
+        "foliage_clear_generated",
+        "landscape_list",
+        "landscape_get_info",
+        "landscape_create",
+        "landscape_rename",
+        "landscape_sculpt",
+        "pcg_generate",
+        "pcg_get_graph_info",
+        "list_fort_actors",
+        "get_fort_actor_info"
+      ],
+      "intent_pattern": "\\b(level\\s*design|align|snap|terrain|foliage|landscape|pcg|fort\\s*actor|blockout|greybox|graybox|hub|area_create|area\\s+layout)\\b",
+      "plan_tools": [
+        "get_actor_bounds",
+        "get_actor_bone_transform",
+        "get_level_bounds",
+        "measure_distance",
+        "check_area_clear",
+        "find_clear_area",
+        "get_ground_z",
+        "area_list",
+        "blockout_list_presets",
+        "worldgen_capabilities",
+        "terrain_get_info",
+        "foliage_list_sources",
+        "foliage_get_stats",
+        "landscape_list",
+        "landscape_get_info",
+        "pcg_get_graph_info",
+        "list_fort_actors",
+        "get_fort_actor_info"
+      ]
+    },
+    "walkthrough": {
+      "id": "leveldesign",
+      "title": "Level Design tools ready",
+      "auto_start": "first_enable",
+      "settings_tab": "Store",
+      "steps": [
+        {
+          "target": "settings.store.root",
+          "title": "Level Design tools ready",
+          "body": "Level-design MCP tools and skill are live. Ask for landscapes, blockouts, foliage, PCG, or Fort actor layout.",
+          "advance": "next",
+          "mode": "rect"
+        }
+      ]
+    }
+  },
+  "backend": {
+    "entry": "backend",
+    "register": "register"
+  }
+}

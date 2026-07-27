@@ -1,0 +1,14 @@
+# UEFN Level Design
+
+Spatial layout, per-area landscapes, blockout presets, worldgen, foliage, PCG, Fort actors. Bundles the leveldesign skill.
+
+Desktop plugin for [UEFN-Ducky](https://github.com/UEFN-Ducky/UEFN-Ducky) (`leveldesign`).
+Install or update from **Settings → Store** in the app — do not install from a zip by hand.
+
+## Build
+
+```bash
+py scripts/build_zip.py
+```
+
+Writes `deploy/leveldesign-1.0.15.ducky-plugin.zip` (scripts/ and deploy/ are not packed).
