@@ -1,7 +1,7 @@
 {
   "id": "leveldesign",
   "kind": "plugin",
-  "version": "1.0.15",
+  "version": "1.0.16",
   "label": "UEFN Level Design",
   "description": "Spatial layout, per-area landscapes, blockout presets, worldgen, foliage, PCG, Fort actors. Bundles the leveldesign skill.",
   "min_app_version": "1.0.0",

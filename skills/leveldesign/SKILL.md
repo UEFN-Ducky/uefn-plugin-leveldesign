@@ -7,8 +7,8 @@ metadata:
   label: UEFN Level Design
   version: 11
   managed_by: uefn-ducky
-  author: Iliya Kovachki
-  copyright: Copyright 2026 Iliya Kovachki
+  author: UEFN-Ducky
+  copyright: Copyright 2026 UEFN-Ducky
   allow_redistribute: false
 ---
 
