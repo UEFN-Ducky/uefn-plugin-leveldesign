@@ -73,12 +73,21 @@ search_assets(search="GrayBox", directory="/Game/Creative/Sets/GrayBox", limit=3
 
 ## Devices (Content Drawer + Verse APIs)
 
-Two layers — never confuse them:
+Two layers — never confuse them.
+
+**SERIAL:** place/wire one MCP call at a time —
+`skill_read_subskill("uefn", "batch_commands")`.
+
+**Sound / horn / SFX / alarms:** search **Devices** for Creative **Audio Player**
+(`search_assets(search="Audio", directory="/Game/Creative")`) — never prop kits
+or Speakers as the gameplay horn. Recipe:
+`skill_read_subskill("uefn", "creative_devices")`.
 
 | Layer | What it is | How to discover | How to place / use |
 |-------|------------|-----------------|--------------------|
-| **Blueprint in level** | Creative device actor | `search_assets(search="Teleporter", directory="/Game/Creative/Devices", limit=10)` or `directory="/Game/Creative"` | `spawn_actor(asset_path="…_C")` → label → folder → `inspect_creative_device` / `set_creative_device_fields` |
-| **Verse API type** | `teleporter_device`, `button_device`, … | Digests (below) | `@editable` typing / `get_verse_api` — **never** `spawn_actor(actor_class="teleporter_device")` |
+| **Blueprint in level** | Creative device actor | `search_assets(search="Teleporter", directory="/Game/Creative/Devices", limit=10)` or `directory="/Game/Creative"` | `spawn_actor(asset_path="…_C")` → wait → label → folder → `inspect_creative_device` / `set_creative_device_fields` |
+| **Audio Player** | Gameplay SFX / horns | `search_assets(search="Audio", directory="/Game/Creative", limit=15)` | spawn `…_C` → wire `@editable audio_player_device` **one field per turn** |
+| **Verse API type** | `teleporter_device`, `button_device`, `audio_player_device`, … | Digests (below) | `@editable` typing / `get_verse_api` — **never** `spawn_actor(actor_class="teleporter_device")` |
 
 Device folders live under `/Game/Creative/Devices/<Name>/` (Button, Teleporter, CharacterSpawner, CaptureArea, … — 100+ folders). List them:
 

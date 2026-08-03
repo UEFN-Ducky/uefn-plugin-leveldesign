@@ -2,10 +2,10 @@
 source_plugin_id: leveldesign
 name: leveldesign
 description: "UEFN level design — spatial awareness, blockout, player flow, combat/spawns, full-game director, themes, lighting, cinematic composition, procedural generation"
-license: All Rights Reserved
+license: Ducky Source-Available License v1.0
 metadata:
   label: UEFN Level Design
-  version: 11
+  version: 12
   managed_by: uefn-ducky
   author: UEFN-Ducky
   copyright: Copyright 2026 UEFN-Ducky
@@ -13,6 +13,13 @@ metadata:
 ---
 
 # UEFN Level Design — place things CORRECTLY
+
+**CRITICAL — editor mutations are SERIAL:** one heavy MCP call (`spawn_actor`,
+`wire_*`, `set_creative_device_fields`, `set_actor_*`, destroy/delete,
+`save_current_level`, editor `execute_python`) → wait → next. Never parallel or
+same-turn multi — that freezes UEFN. Details:
+`skill_read_subskill("uefn", "batch_commands")`. Gameplay SFX/horns = Creative
+**Audio Player** only (`creative_devices`) — never prop kits for “horn”.
 
 The #1 level-design failure is placing blind: guessing coordinates, stacking
 actors inside each other, floating props. These tools give you the spatial
