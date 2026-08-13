@@ -51,8 +51,9 @@ Load each step with `skill_read_subskill("leveldesign", "<id>")`.
 counts — count with `find_devices`.
 
 ### 2–3. Greybox then playtest
-Bulk cubes via one `execute_python` loop (see leveldesign SKILL.md). Label folders
-`Blockout/…`. Run `blockout_playtest` **before** theme meshes.
+`blockout_layout` / `area_create` / `pcg_generate` (see leveldesign SKILL.md). Label folders
+`Blockout/…`. Serial `spawn_actor` leftovers only — never a bulk `execute_python`
+spawn loop. Run `blockout_playtest` **before** theme meshes.
 
 ### 4–6. Flow → combat → spawns
 Circulation on 512 first (`environment_elements`). Then combat cover pass. Then

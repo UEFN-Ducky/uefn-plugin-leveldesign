@@ -25,7 +25,7 @@ worldgen_capabilities()
 
 - **mesh** terrain (`terrain_generate`) = GeometryScript heightfield — the AI create+sculpt path that works.
 - **Real Landscape create with panels is unavailable from Python** on this UEFN build:
-  `spawn_actor(Landscape)` → `LandscapePlaceholder` (0 panels). Panels live on
+  `spawn_actor(actor_class="Landscape")` → `LandscapePlaceholder` (0 panels). Panels live on
   `LandscapeStreamingProxy`. Only Landscape Mode → **Create** builds them.
   T3D shows `ComponentSizeQuads` / `GridSize`, but those props are not Python-editable.
   Call `landscape_create` for the structured unavailable response + UI steps; after

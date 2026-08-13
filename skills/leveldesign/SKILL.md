@@ -5,7 +5,7 @@ description: "UEFN level design — spatial awareness, blockout, player flow, co
 license: Ducky Source-Available License v1.0
 metadata:
   label: UEFN Level Design
-  version: 12
+  version: 13
   managed_by: uefn-ducky
   author: UEFN-Ducky
   copyright: Copyright 2026 UEFN-Ducky
@@ -93,10 +93,10 @@ save_current_level()
 (`Hub/Spawners`, `Blockout/COMBAT`) still ok inside an area. See `area_management`
 and `blockout_playtest`.
 
-**Screenshots:** call `take_high_res_screenshot` → use the returned project `path`
-(`Saved/Screenshots`) / `media_url`. Chat snips go to `Saved/DuckyCaptures`.
-AppData `capture_path` / `tool_captures` / snips folders are preview-only — if you
-need the file for import/Blender, copy into the project first. Never Bash
+**Screenshots:** call `take_high_res_screenshot` → use the returned `path` under
+`%LOCALAPPDATA%/UEFN-Ducky/tool_captures/` (and `media_url`). Chat snips land
+there too. **Never** write, copy, or place captures inside the UEFN project
+(`Saved/Screenshots`, `Saved/DuckyCaptures`, or anywhere else). Never Bash
 `find` / `ls` for `uefn_ducky_screenshot.png`.
 
 Use this for devices, landmarks, and small arrangements. Rows/fences: spawn one at
@@ -105,33 +105,35 @@ a time (or a short loop), then `align_actors` + `distribute_actors`.
 ## Greybox / large blockout golden path (cities, forests, districts)
 
 **Named areas (hub/store/arena/…):** prefer `area_create` + presets (above) over
-hand-rolled scripts.
+hand-placed cubes.
 
-When the user asks for a **large custom** greybox (dozens–hundreds of cubes) that
-is not a preset, **do not** issue hundreds of `spawn_actor` turns. Prefer **one**
-`execute_python` call that loops `EditorLevelLibrary.spawn_actor_from_object`
-(still one heavy MCP call — never parallel heavies). Folder under `Areas/<id>/…`
-or `Blockout/…`.
+When the user asks for a **large custom** greybox (dozens–hundreds of volumes)
+that is not a preset, **do not** issue hundreds of `spawn_actor` turns and
+**do not** loop `EditorLevelLibrary.spawn_actor_from_object` inside
+`execute_python` (that freezes UEFN). Use the layout tools, then serial
+`spawn_actor` only for leftovers:
 
 ```
 1. area_list / get_level_bounds + check_area_clear   # find empty footprint / slot
-2. create_material (Materials plugin)      # water / stone / wall / building / roof
-3. execute_python                          # ONE script: place meshes, set_actor_label,
-                                           # set_folder_path / folders, assign materials
-4. set_viewport_camera + screenshot        # verify
-5. save_current_level()
+2. area_create / blockout_layout                    # named area or preset volumes
+3. pcg_generate / foliage_scatter                   # fill when the user wants scatter
+4. spawn_actor(..., label=..., folder=...)          # leftovers only — one per turn
+5. set_viewport_camera + screenshot                 # verify
+6. save_current_level()                             # once at the end
 ```
+
+Folder under `Areas/<id>/…` or `Blockout/…`. One editor mutator per assistant
+message (`skill_read_subskill("uefn", "batch_commands")`).
 
 Notes:
 
 - Cube mesh: `/Engine/BasicShapes/Cube.Cube` (100 uu). Scale accordingly.
-- Call `uefn_editor_python_hints` before writing materials/Python if unsure.
 - Folders: e.g. `BlockoutCity/Canal_Water`, `Building_Island_01`, `Perimeter_Walls`,
   `Forest/ForestExit`, `Castle` — everything in its own Outliner folder.
 - Budget: hundreds of actors OK; prefer bigger combined masses over thousands of
   tiny props.
 - Never `os.walk` Fortnite install / AppData from `execute_python`.
-- Still one heavy editor tool per assistant message — one bulk Python script is OK.
+- `execute_python` is last resort for a single reflection call, never a spawn loop.
 
 ## UEFN metrics (rules of thumb — verify in playtest)
 
@@ -148,8 +150,8 @@ Notes:
 
 - **Bounds are AABB** (axis-aligned): rotated long props report bigger boxes —
   after big rotations re-read bounds before trusting gaps.
-- **`check_area_clear` before choosing a site**; for bulk Python loops, clear the
-  footprint first, then place from a deterministic seed.
+- **`check_area_clear` before choosing a site**; for layout tools / serial
+  `spawn_actor`, clear the footprint first, then place from a deterministic seed.
 - **Verify visually.** After a group of placements: frame it with
   `set_viewport_camera`, `take_high_res_screenshot`, and actually look.
 - Deep-dives: see **Reference files** below. Complete mode order:

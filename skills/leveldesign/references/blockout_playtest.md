@@ -11,7 +11,9 @@ metadata:
 
 Never start with final art. Rough volumes → walk the flow → only then theme
 (`design_styles`, `theme_recipes`). Large greybox placement: leveldesign SKILL.md
-**Greybox / large blockout golden path** (one `execute_python` loop).
+**Greybox / large blockout golden path** (`blockout_layout` / `area_create` /
+`pcg_generate` / `foliage_scatter`, serial `spawn_actor` leftovers — never a
+bulk `execute_python` spawn loop).
 
 ## Label intent
 
@@ -81,7 +83,8 @@ then `theme_recipes`. Order: `full_game_director`.
 
 - Don’t scatter marketplace props before the fly-through passes.
 - Don’t “fix flow” with only brighter materials — fix geometry.
-- Don’t spawn hundreds of cubes via parallel `spawn_actor` — one Python loop.
+- Don’t spawn hundreds of cubes via parallel `spawn_actor` or an `execute_python`
+  spawn loop — `blockout_layout` / `area_create` / serial `spawn_actor`.
 - Don’t delete Blockout folder until final art replaces it on purpose.
 
 ## Related

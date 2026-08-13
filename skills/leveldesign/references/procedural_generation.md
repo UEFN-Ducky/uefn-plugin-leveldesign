@@ -24,18 +24,17 @@ Two sub-routes:
 with `check_area_clear` / `snap_actor_to_ground` / folders.
 
 **B2 — Large greybox (preferred for cities/forests):** after surveying a clear
-footprint, **one** `execute_python` call that loops
-`unreal.EditorLevelLibrary.spawn_actor_from_object`, sets label + folder path +
-scale/material inside the script. Still one heavy MCP tool per step — never
-parallel `execute_python` / `spawn_actor` / `save_current_level`.
+footprint, `blockout_layout` / `area_create` / `pcg_generate` / `foliage_scatter`.
+Leftover cubes: serial `spawn_actor(..., label=..., folder=...)` — one per
+assistant message. Never an `execute_python` spawn loop (freezes UEFN).
 
 Non-negotiables:
 
 - **Deterministic seed.** Derive every position from an explicit seed the user
   can re-run (say the seed in your summary). Same seed → same level.
 - **Clear the site first.** `check_area_clear` on the full footprint before bulk
-  place. For precise mode, clear each spot; for greybox Python, clear once then
-  place from computed coords.
+  place. For precise mode, clear each spot; for greybox, clear once then place
+  from computed coords via layout tools / serial `spawn_actor`.
 - **Tag the generation**: every spawned actor gets a folder like
   `Generated/<name>` or `BlockoutCity/...` + labels. Regenerate = select that
   folder's actors → `delete_actors` → rerun. Never regenerate on top of a
@@ -48,7 +47,7 @@ Non-negotiables:
   spacing keeps rows readable). Streets/orchards/crates.
 - **Scatter with min-distance** — random points, reject any closer than
   `min_dist` to an accepted point (track accepted list), then
-  place survivors (spawn_actor or Python loop).
+  place survivors (`spawn_actor(..., label=..., folder=...)` — one per turn).
 - **Radial** — N points on a circle (angle = i·2π/N): arena cover, stone
   circles, spawn rings.
 - **Path/corridor** — walk a polyline; place segments every `step`.
@@ -63,7 +62,8 @@ Non-negotiables:
   actors: fine. Thousands of individual small props: editor pain — prefer bigger
   combined meshes or lower density.
 - Spawn in modest passes and screenshot between passes when iterating by hand;
-  for one-shot greybox, one Python loop + one screenshot is enough.
+  for one-shot greybox, `blockout_layout` / `area_create` plus one screenshot
+  is enough. Never a Python spawn loop.
 
 ### Verify a generation
 

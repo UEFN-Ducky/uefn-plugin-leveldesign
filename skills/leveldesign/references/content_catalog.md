@@ -20,7 +20,10 @@ That **Fortnite** tree is a **UI gallery filter**, not a registry path. These al
 
 **Placeable Fortnite Creative content lives under `/Game/Creative/...`.** Always scope `search_assets` / `list_assets` there (or a subfolder below). Param is **`search=`** (not `query` / `name_filter`). Prefer `limit=10..50` + `fields=["asset_name","package_path","asset_class"]` + `offset` to page.
 
-Spawn placeables with the **`.…_C`** path from the hit (`BlueprintGeneratedClass`), then `set_actor_label` + `set_actor_folder` + `save_current_level`.
+Spawn placeables with a **`.…_C`** class path (`BlueprintGeneratedClass`). The hit's
+`path` is `{package}.{asset}` and is **not** spawnable as-is — append `_C` (or use
+the BlueprintGeneratedClass path) before `spawn_actor(asset_path=…)`, then
+`set_actor_label` + `set_actor_folder` + `save_current_level`.
 
 ---
 
@@ -127,7 +130,7 @@ Custom project assets in Content Browser (weapons, imported meshes): `search_ass
 ```
 1. Pick directory from tables above (never /Fortnite)
 2. search_assets(search="<keyword>", directory="…", limit=20, fields=[…])
-3. Pick a BlueprintGeneratedClass path ending in _C
+3. Pick a BlueprintGeneratedClass path ending in `_C` (the search hit `path` is not spawnable as-is — append `_C`)
 4. get_asset_info / get_actor_bounds after one test spawn if scale is unknown
 5. spawn_actor → set_actor_label → set_actor_folder → snap_actor_to_ground (props)
 6. take_high_res_screenshot → save_current_level
