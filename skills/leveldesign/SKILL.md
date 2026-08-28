@@ -2,17 +2,19 @@
 source_plugin_id: leveldesign
 name: leveldesign
 description: "UEFN level design — spatial awareness, blockout, player flow, combat/spawns, full-game director, themes, lighting, cinematic composition, procedural generation"
-license: Ducky Source-Available License v1.0
+license: MIT
 metadata:
   label: UEFN Level Design
-  version: 13
+  version: 15
   managed_by: uefn-ducky
   author: UEFN-Ducky
-  copyright: Copyright 2026 UEFN-Ducky
-  allow_redistribute: false
+  copyright: Copyright 2026 Mindful Path Company, LLC
+  allow_redistribute: true
 ---
 
 # UEFN Level Design — place things CORRECTLY
+
+**Epic UEFN MCP:** Settings → MCPs → **UEFN MCP (Epic)** (`unreal-mcp`). Bridge tools: `unreal__list_toolsets` → `unreal__describe_toolset` → `unreal__call_tool` (toolsets — not flat `unreal__create_entity`). Map: `skill_read_subskill("uefn", "epic_mcp")`. Ducky tools below stay for this skill's domain when Epic does not cover it.
 
 **CRITICAL — editor mutations are SERIAL:** one heavy MCP call (`spawn_actor`,
 `wire_*`, `set_creative_device_fields`, `set_actor_*`, destroy/delete,
@@ -204,6 +206,6 @@ Load with `skill_read_subskill("leveldesign", "<id>")`:
 | `theme_recipes` | City/forest/ship/dungeon concrete numbers |
 | `design_styles` | Genre layout sketches |
 | `cinematic_composition` | Vistas, reveals, framing |
-| `lighting` | Sun/sky/local lights, Day Sequence |
+| `lighting` | Sun/sky/local lights, Day Sequence (stars → materials `starfield_recipe`) |
 | `procedural_generation` | PCG / seeded mass placement |
 | `landscape_foliage` | Terrain + foliage scatter |
