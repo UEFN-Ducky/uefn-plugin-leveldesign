@@ -14,6 +14,9 @@ before polishing props. Verify every change with `set_viewport_camera` +
 `take_high_res_screenshot` (or PIE). Load this when the ask is mood, day/night,
 or "why does it look washed out."
 
+**Stars / night sky (HARD):** not lighting, not a texture, not Niagara sprites.
+`skill_read_subskill("materials", "starfield_recipe")` only.
+
 ## Units reminder
 
 - 1 uu = 1 cm. Player eye ≈ **170 uu**.
