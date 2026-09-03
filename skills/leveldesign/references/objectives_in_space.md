@@ -32,7 +32,7 @@ Rule: from the approach, eye ~170, the objective (or its landmark) must be
 | **Race** | Linear or circuit; checkpoints on path only | Checkpoint pads / triggers; no skips |
 | **Hub quests** | Objective at spoke end; gate at hub mouth | Triggers / Verse unlock |
 
-For Creative field names: `inspect_creative_device` / `set_creative_device_fields`
+For Creative field names: Epic `DeviceToolset` `GetDeviceProperties` / `SetDeviceProperty`
 — never invent options.
 
 ## Spacing rules

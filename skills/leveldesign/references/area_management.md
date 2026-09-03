@@ -20,8 +20,10 @@ own far-away footprint with its own Outliner tree.
    freehand `spawn_actor` / inventing cubes.
 3. **Never leave actors at Outliner root.** Nest under `Areas/<id>/…`.
 4. **AI “landscape” = `terrain_generate` via `area_create`.** Real Landscape Mode
-   → Create is manual-only (`landscape_create` is unavailable from Python).
-   Do not expect `landscape_sculpt` to change visible terrain.
+   → Create is manual-only. The `landscape_create` tool **does exist** but is a
+   probe: on UEFN it returns `unavailable` plus the UI steps, so call it only to
+   confirm — never as the create path. Do not expect `landscape_sculpt` to change
+   visible terrain.
 
 ## Slot grid
 

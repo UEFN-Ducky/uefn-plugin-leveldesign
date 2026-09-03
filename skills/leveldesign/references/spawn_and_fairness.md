@@ -35,8 +35,11 @@ tiny box fight (then barriers until round start).
 ## Counts and wiring
 
 - MaxPlayers **N** ⇒ **N** Player Spawn Pads (islandsettings).
-- Count: `find_devices(label_filter="Spawn", class_filter="Player_Spawner")`.
-- Wire: `wire_player_spawners("<IslandSettings label>")`.
+- Count: `get_all_actors(label_filter=\"Spawn\")`.
+- Wire: `wire_player_spawners("<Verse player-manager label>")` — the argument is the
+  **Verse manager device** owning an `AllPlayerSpawners` array. Island Settings is a
+  Creative device with no Verse `@editable`, so passing its label fails. Omit the pad
+  list to auto-detect pads parented under that manager.
 - Session / pad recipes: `skill_read_subskill("islandsettings", "session_setup")`.
 
 Advanced respawn rules (delay, team gate, “don’t spawn on enemies”) → Verse

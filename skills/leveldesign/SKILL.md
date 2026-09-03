@@ -17,7 +17,7 @@ metadata:
 **Epic UEFN MCP:** Settings → MCPs → **UEFN MCP (Epic)** (`unreal-mcp`). Bridge tools: `unreal__list_toolsets` → `unreal__describe_toolset` → `unreal__call_tool` (toolsets — not flat `unreal__create_entity`). Map: `skill_read_subskill("uefn", "epic_mcp")`. Ducky tools below stay for this skill's domain when Epic does not cover it.
 
 **CRITICAL — editor mutations are SERIAL:** one heavy MCP call (`spawn_actor`,
-`wire_*`, `set_creative_device_fields`, `set_actor_*`, destroy/delete,
+`wire_*`, Epic `DeviceToolset` `SetDeviceProperty`, `set_actor_*`, destroy/delete,
 `save_current_level`, editor `execute_python`) → wait → next. Never parallel or
 same-turn multi — that freezes UEFN. Details:
 `skill_read_subskill("uefn", "batch_commands")`. Gameplay SFX/horns = Creative

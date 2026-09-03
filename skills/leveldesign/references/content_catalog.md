@@ -39,6 +39,8 @@ the BlueprintGeneratedClass path) before `spawn_actor(asset_path=…)`, then
 | Building greebles | `/Game/Creative/Items/Building_Parts` | `search="Ring"` |
 | Themed kits (castle, military, graybox…) | `/Game/Creative/Sets/<Theme>` | e.g. `GrayBox`, `MilitaryBase`, `Spooky`, `PrincessCastle`, `Oak` |
 | Prop-set packs | `/Game/Creative/Sets/PropSets` | `Playgrounds`, `Primitives`, … |
+| **Harrowville** (v42.10, horror) | `search_assets(search="Harrowville")` | Floor/Stair/Roof, Wall, Prop, Cliff galleries + `Harrowville House`; pairs with the Harrowville: Environment template |
+| **Cluster Coast** (v42.10, coastal) | `search_assets(search="Cluster Coast")` | Floor, Wall, Roof, Prop galleries + `Duck Yacht`, `Salty Duck` |
 | Trees / hedges | `/Game/Creative/Environments/...` | `ApolloTrees`, `ApolloHedges`, `AthenaHedges`, … |
 
 **Browse folders** (like expanding Content Drawer):
@@ -88,7 +90,7 @@ or Speakers as the gameplay horn. Recipe:
 
 | Layer | What it is | How to discover | How to place / use |
 |-------|------------|-----------------|--------------------|
-| **Blueprint in level** | Creative device actor | `search_assets(search="Teleporter", directory="/Game/Creative/Devices", limit=10)` or `directory="/Game/Creative"` | `spawn_actor(asset_path="…_C")` → wait → label → folder → `inspect_creative_device` / `set_creative_device_fields` |
+| **Blueprint in level** | Creative device actor | `search_assets(search="Teleporter", directory="/Game/Creative/Devices", limit=10)` or `directory="/Game/Creative"` | `spawn_actor(asset_path="…_C")` → wait → label → folder → Epic `DeviceToolset` `GetDeviceProperties` / `SetDeviceProperty` |
 | **Audio Player** | Gameplay SFX / horns | `search_assets(search="Audio", directory="/Game/Creative", limit=15)` | spawn `…_C` → wire `@editable audio_player_device` **one field per turn** |
 | **Verse API type** | `teleporter_device`, `button_device`, `audio_player_device`, … | Digests (below) | `@editable` typing / `get_verse_api` — **never** `spawn_actor(actor_class="teleporter_device")` |
 
@@ -137,3 +139,12 @@ Custom project assets in Content Browser (weapons, imported meshes): `search_ass
 ```
 
 If zero hits: broaden keyword **or** step up one folder (e.g. Walls → BuildingActors → Creative), never jump to inventing cube greybox unless the user asked for greybox.
+
+## v42.10 additions worth knowing
+
+- **Horror audio:** 166 Audio Control Buses, music, SFX and vocals under `Fortnite > Audio > Horror` — `search_assets(search="Horror", directory="/Game/Audio")` (confirm the mount with `get_project_info`).
+- **Foliage:** `Brimstone_DeadGrass_A`, `Brimstone_DeadShrub_A` in `Fortnite > Environment > Foliage`.
+- **Paintable landscape layer:** `MI_Hera_Grass_Covers_Boreal_A` in `Fortnite > Environment > Materials`.
+- `CP_Prop_Rock_Wall_Moss` now exposes top-moss colour selection.
+- New Rare/Epic/Legendary **Striker Burst AR** variants for loadouts.
+- Themes: horror → Harrowville set + Horror audio; coastal/beach → Cluster Coast set.

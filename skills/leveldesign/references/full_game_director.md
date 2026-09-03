@@ -48,7 +48,7 @@ Load each step with `skill_read_subskill("leveldesign", "<id>")`.
 ### 1. Session shell
 `skill_read_subskill("islandsettings", "session_setup")` (or islandsettings pack).
 `wire_player_spawners` when the pad count matches MaxPlayers. Never invent pad
-counts — count with `find_devices`.
+counts — count with `get_all_actors(label_filter=…)` (or Epic `DeviceToolset`).
 
 ### 2–3. Greybox then playtest
 `blockout_layout` / `area_create` / `pcg_generate` (see leveldesign SKILL.md). Label folders

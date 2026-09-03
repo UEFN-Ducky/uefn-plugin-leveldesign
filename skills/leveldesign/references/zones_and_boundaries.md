@@ -33,7 +33,7 @@ slivers are peek exploits and light leaks.
 | Damage / kill volumes | Hard OOB punish |
 | Storm / zone devices | Shrinking playable (mode-dependent) |
 
-Inspect real options with `inspect_creative_device` / `find_devices`. Barrier size
+Inspect real options with Epic `DeviceToolset` `GetDeviceProperties` or `get_all_actors(label_filter=…)`. Barrier size
 is often in **tiles** (1 tile ≈ one grid cell) — confirm on device.
 
 ## Soft vs hard OOB
