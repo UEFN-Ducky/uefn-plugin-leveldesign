@@ -7,6 +7,8 @@ metadata:
   load_condition: "User asks to design/build a level, arena, map, or a themed area, or names a mode like box fight, zone wars, deathrun, tycoon, prop hunt"
 ---
 
+**Tool order (HARD):** 1) Official UEFN MCP first (`ducky_get_status` → `epic_mcp_online` → nested `unreal__*`). 2) Ducky listener second. 3) `execute_python` LAST — never a placement path, even if Epic and listener failed. Map: `skill_read_subskill("uefn", "epic_mcp")`.
+
 ## Level design styles — composition first
 
 ### The blockout-first workflow

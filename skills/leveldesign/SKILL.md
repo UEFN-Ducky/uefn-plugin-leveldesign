@@ -5,7 +5,7 @@ description: "UEFN level design — spatial awareness, blockout, player flow, co
 license: MIT
 metadata:
   label: UEFN Level Design
-  version: 15
+  version: 19
   managed_by: uefn-ducky
   author: UEFN-Ducky
   copyright: Copyright 2026 Mindful Path Company, LLC
@@ -14,14 +14,34 @@ metadata:
 
 # UEFN Level Design — place things CORRECTLY
 
-**Epic UEFN MCP:** Settings → MCPs → **UEFN MCP (Epic)** (`unreal-mcp`). Bridge tools: `unreal__list_toolsets` → `unreal__describe_toolset` → `unreal__call_tool` (toolsets — not flat `unreal__create_entity`). Map: `skill_read_subskill("uefn", "epic_mcp")`. Ducky tools below stay for this skill's domain when Epic does not cover it.
+**Epic UEFN MCP FIRST (HARD):** `ducky_get_status` → when `epic_mcp_online`,
+place/move/batch via nested Epic `unreal__*` only
+(`unreal__list_toolsets` → `unreal__describe_toolset` → `unreal__call_tool`).
+Devices → `ValkyrieToolset.DeviceToolset` (`PlaceDevice`). Actors/props →
+`editor_toolset.toolsets.actor.ActorTools`. **5+ placements** →
+`editor_toolset.toolsets.programmatic.ProgrammaticToolset` `execute_tool_script`
+(not a listener `execute_python` loop). PIC/session →
+`ValkyrieToolset.SessionToolset`. Map: `skill_read_subskill("uefn", "epic_mcp")`.
 
-**CRITICAL — editor mutations are SERIAL:** one heavy MCP call (`spawn_actor`,
-`wire_*`, Epic `DeviceToolset` `SetDeviceProperty`, `set_actor_*`, destroy/delete,
-`save_current_level`, editor `execute_python`) → wait → next. Never parallel or
-same-turn multi — that freezes UEFN. Details:
+Ducky listener is **second** — spatial facts (`get_actor_bounds`, `find_clear_area`,
+`get_ground_z`), `area_create` / `foliage_scatter`, `spawn_actor` for leftover
+props Epic cannot place. **`execute_python` is LAST** — never a placement path,
+even if Epic MCP and the listener already failed. Do not skip to Python because
+other options were “exhausted”. The listener refuses spawn/move/material scripts.
+
+**CRITICAL — editor mutations are SERIAL:** one heavy MCP call (`unreal__call_tool`,
+`spawn_actor`, `wire_*`, `set_actor_*`, `save_current_level`) → wait → next.
+Never parallel or same-turn multi — that freezes UEFN. Details:
 `skill_read_subskill("uefn", "batch_commands")`. Gameplay SFX/horns = Creative
 **Audio Player** only (`creative_devices`) — never prop kits for “horn”.
+
+**Place like Content Drawer (HARD):** Fortnite catalog assets are allowed.
+Spawn the Actor Blueprint (`…_C`) drag-drop would place — never
+`spawn_actor_from_object(StaticMesh)` / FortStaticMeshActor wrapping a
+`/BakeData/` mesh (that cook-fails `AssetValidator_AssetReferenceRestrictions`).
+Default trees: `/Game/Creative/Environments` (ApolloTrees, hedges) via
+`foliage_list_sources` → `foliage_scatter(sources=those `_C` paths)`. Skip
+BakeData / HLOD static meshes.
 
 The #1 level-design failure is placing blind: guessing coordinates, stacking
 actors inside each other, floating props. These tools give you the spatial
@@ -81,12 +101,14 @@ Always `search_assets(search=…, directory=…)` — never `query` / `name_filt
 ## Golden path (precise few-prop placement)
 
 ```
-get_asset_info / get_actor_bounds        # 1. know the SIZE
+ducky_get_status                            # 0. Epic first when epic_mcp_online
+unreal__* ActorTools / PlaceDevice          #    official UEFN MCP
+get_asset_info / get_actor_bounds           # 1. know the SIZE
 find_clear_area({"near": [x,y,z], "extent": [ex,ey,ez]})   # 2. know it FITS
-spawn_actor({"asset_path": "...", "location": <spot>})     # 3. place (one call per actor)
+spawn_actor({"asset_path": "...", "location": <spot>, "label": "...", "folder": "..."})
+                                            # 3. leftover props only (Epic-offline / Epic cannot place)
 snap_actor_to_ground({"actor_path": "<label>"})            # 4. no floating props
-set_actor_label + set_actor_folder                         # 5. ALWAYS organize — never Outliner root
-take_high_res_screenshot / set_viewport_camera             # 6. LOOK at it (use returned path/media_url)
+take_high_res_screenshot / set_viewport_camera             # 5. LOOK at it
 save_current_level()
 ```
 
@@ -112,8 +134,8 @@ hand-placed cubes.
 When the user asks for a **large custom** greybox (dozens–hundreds of volumes)
 that is not a preset, **do not** issue hundreds of `spawn_actor` turns and
 **do not** loop `EditorLevelLibrary.spawn_actor_from_object` inside
-`execute_python` (that freezes UEFN). Use the layout tools, then serial
-`spawn_actor` only for leftovers:
+`execute_python` (refused; freezes UEFN). Use Epic ProgrammaticToolset for 5+
+editor ops, or the layout tools, then serial `spawn_actor` only for leftovers:
 
 ```
 1. area_list / get_level_bounds + check_area_clear   # find empty footprint / slot
@@ -135,7 +157,9 @@ Notes:
 - Budget: hundreds of actors OK; prefer bigger combined masses over thousands of
   tiny props.
 - Never `os.walk` Fortnite install / AppData from `execute_python`.
-- `execute_python` is last resort for a single reflection call, never a spawn loop.
+- **Never** `execute_python` to spawn or assign materials. Epic `unreal__*` first;
+  listener (`foliage_scatter` / `spawn_actor`) second; Python LAST — never because
+  other options were exhausted.
 
 ## UEFN metrics (rules of thumb — verify in playtest)
 

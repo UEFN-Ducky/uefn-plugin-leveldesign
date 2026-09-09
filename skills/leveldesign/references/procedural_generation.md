@@ -7,6 +7,8 @@ metadata:
   load_condition: "User asks for procedural/PCG generation, scattering many props, random layouts, mazes, dungeons, forests, or generated arenas"
 ---
 
+**Tool order (HARD):** 1) Official UEFN MCP first (`ducky_get_status` → `epic_mcp_online` → nested `unreal__*`). 2) Ducky listener second. 3) `execute_python` LAST — never a placement path, even if Epic and listener failed. Map: `skill_read_subskill("uefn", "epic_mcp")`.
+
 ## Procedural generation — two routes
 
 ### Route A: PCG graphs (when a graph already exists)
@@ -24,7 +26,8 @@ Two sub-routes:
 with `check_area_clear` / `snap_actor_to_ground` / folders.
 
 **B2 — Large greybox (preferred for cities/forests):** after surveying a clear
-footprint, `blockout_layout` / `area_create` / `pcg_generate` / `foliage_scatter`.
+footprint, `blockout_layout` / `area_create` / `pcg_generate` / `foliage_scatter`
+with Content Drawer `_C` `sources=` from `foliage_list_sources` (not BakeData static meshes).
 Leftover cubes: serial `spawn_actor(..., label=..., folder=...)` — one per
 assistant message. Never an `execute_python` spawn loop (freezes UEFN).
 
@@ -36,9 +39,9 @@ Non-negotiables:
   place. For precise mode, clear each spot; for greybox, clear once then place
   from computed coords via layout tools / serial `spawn_actor`.
 - **Tag the generation**: every spawned actor gets a folder like
-  `Generated/<name>` or `BlockoutCity/...` + labels. Regenerate = select that
-  folder's actors → `delete_actors` → rerun. Never regenerate on top of a
-  previous run.
+  `Generated/<name>` or `BlockoutCity/...` + labels. Regenerate foliage =
+  `foliage_clear_generated` then re-scatter Creative sources. Never regenerate
+  on top of a previous run. Never `delete_actors` (refused).
 - **Never revive `spawn_actor_batch` / `batch_commands`.**
 
 ### Pattern cookbook (positions you compute)

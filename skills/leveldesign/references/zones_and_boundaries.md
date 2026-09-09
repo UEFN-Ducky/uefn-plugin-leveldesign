@@ -7,6 +7,8 @@ metadata:
   load_condition: "User asks about map bounds, out of bounds, kill volumes, barriers, playable area, storm circle, sealing the map, or level bounds wrong"
 ---
 
+**Tool order (HARD):** 1) Official UEFN MCP first (`ducky_get_status` → `epic_mcp_online` → nested `unreal__*`). 2) Ducky listener second. 3) `execute_python` LAST — never a placement path, even if Epic and listener failed. Map: `skill_read_subskill("uefn", "epic_mcp")`.
+
 # Zones and boundaries
 
 Contain the playable space so players never see the void or walk off the island.

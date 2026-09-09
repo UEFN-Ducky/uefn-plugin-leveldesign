@@ -7,6 +7,8 @@ metadata:
   load_condition: "User wants to build a complete game mode, full island, playable match loop, or asks where to start for a whole game not just a pretty map"
 ---
 
+**Tool order (HARD):** 1) Official UEFN MCP first (`ducky_get_status` → `epic_mcp_online` → nested `unreal__*`). 2) Ducky listener second. 3) `execute_python` LAST — never a placement path, even if Epic and listener failed. Map: `skill_read_subskill("uefn", "epic_mcp")`.
+
 # Full game director — space + systems in order
 
 Pretty maps without a match loop are demos. This is the **order of work** for a

@@ -7,6 +7,8 @@ metadata:
   load_condition: "User asks for landscape, terrain, heightmap, foliage, vegetation, forest scatter, biome, or sculpted ground without placing individual tree assets"
 ---
 
+**Tool order (HARD):** 1) Official UEFN MCP first (`ducky_get_status` → `epic_mcp_online` → nested `unreal__*`). 2) Ducky listener second. 3) `execute_python` LAST — never a placement path, even if Epic and listener failed. Map: `skill_read_subskill("uefn", "epic_mcp")`.
+
 ## Landscape & foliage — worldgen tools
 
 UEFN-Ducky can **form terrain** and **scatter vegetation as instances**, but foliage
@@ -31,7 +33,8 @@ worldgen_capabilities()
   Call `landscape_create` for the structured unavailable response + UI steps; after
   Create, call `landscape_rename`. Use `landscape_list` / `landscape_get_info` for panels.
 - **Landscape sculpt via Python is a verified NO-OP on visible terrain.** `landscape_export/import_heightmap_from_render_target` exist and the data round-trips (export reads back what import wrote), but importing a full white/max heightmap left the terrain perfectly flat with proxy bounds Z unchanged — even after `force_layers_full_update()`. So `landscape_sculpt` (verify/add/set) writes only a buffer, not geometry. **For AI-sculpted terrain use `terrain_generate` (mesh).** `landscape_sculpt` is retained for parity in case a future engine build composites imports.
-- **Default foliage (`auto`/`actors`)**: tagged StaticMeshActors reusing source meshes.
+- **Default foliage (`auto`/`actors`)**: Content Drawer Actor Blueprints (`_C`) —
+  the same class drag-drop places. Never FortStaticMeshActor wrapping a BakeData mesh.
   HISM often does not render; IFA crashes. Cap actor demos ≤120; `foliage_clear_generated`.
 - **`placement_mode='hism'`**: experimental HISM containers.
 
@@ -49,15 +52,18 @@ terrain_generate({
   ],
   level_folder: "Generated/WorldgenDemo"
 })
-foliage_list_sources({search:"tree"})
+foliage_list_sources({search:"tree"})       # Content Drawer `_C` + project
+# MUST pass sources= from that list (`_C` Blueprints, not BakeData SM)
 foliage_scatter({
-  center, extent, sources:[...], seed:42,
-  density_per_100m2: 6, min_distance: 400, max_instances: 250,
+  center, extent, sources:[<paths from foliage_list_sources>], seed:42,
+  density_per_100m2: 6, min_distance: 400, max_instances: 120,
   clear_first: true, level_folder: "Generated/WorldgenDemo"
 })
 set_viewport_camera + take_high_res_screenshot
 save_current_level()
 ```
+
+If `foliage_list_sources` is empty: `search_assets(search="Tree", directory="/Game/Creative/Environments", limit=20)` and scatter the `…_C` Blueprint paths. Skip BakeData static meshes.
 
 ### Hard rules
 

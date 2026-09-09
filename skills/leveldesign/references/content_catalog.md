@@ -7,6 +7,8 @@ metadata:
   load_condition: "User asks to place props, walls, floors, prefabs, galleries, Creative devices, browse Content Drawer / Fortnite catalog, or find what Fortnite assets exist to build with"
 ---
 
+**Tool order (HARD):** 1) Official UEFN MCP first (`ducky_get_status` → `epic_mcp_online` → nested `unreal__*`). 2) Ducky listener second. 3) `execute_python` LAST — never a placement path, even if Epic and listener failed. Map: `skill_read_subskill("uefn", "epic_mcp")`.
+
 ## Content Drawer ≠ asset mount
 
 In the editor UI: **Content Drawer → All → Fortnite → Props / Prefabs / Devices**.
@@ -41,7 +43,12 @@ the BlueprintGeneratedClass path) before `spawn_actor(asset_path=…)`, then
 | Prop-set packs | `/Game/Creative/Sets/PropSets` | `Playgrounds`, `Primitives`, … |
 | **Harrowville** (v42.10, horror) | `search_assets(search="Harrowville")` | Floor/Stair/Roof, Wall, Prop, Cliff galleries + `Harrowville House`; pairs with the Harrowville: Environment template |
 | **Cluster Coast** (v42.10, coastal) | `search_assets(search="Cluster Coast")` | Floor, Wall, Roof, Prop galleries + `Duck Yacht`, `Salty Duck` |
-| Trees / hedges | `/Game/Creative/Environments/...` | `ApolloTrees`, `ApolloHedges`, `AthenaHedges`, … |
+| Trees / hedges | `/Game/Creative/Environments` | `search="Tree"` / `ApolloTrees` / `ApolloHedges` / `AthenaHedges` |
+
+Fortnite catalog is **allowed**. Place the Actor Blueprint (`…_C`) Content Drawer
+drag-drop uses — never wrap a `/BakeData/` static mesh in `FortStaticMeshActor`
+(that cook-fails `AssetValidator_AssetReferenceRestrictions`). Prefer
+`/Game/Creative/Environments` for trees (ApolloTrees, hedges). Skip BakeData / HLOD.
 
 **Browse folders** (like expanding Content Drawer):
 
@@ -90,8 +97,8 @@ or Speakers as the gameplay horn. Recipe:
 
 | Layer | What it is | How to discover | How to place / use |
 |-------|------------|-----------------|--------------------|
-| **Blueprint in level** | Creative device actor | `search_assets(search="Teleporter", directory="/Game/Creative/Devices", limit=10)` or `directory="/Game/Creative"` | `spawn_actor(asset_path="…_C")` → wait → label → folder → Epic `DeviceToolset` `GetDeviceProperties` / `SetDeviceProperty` |
-| **Audio Player** | Gameplay SFX / horns | `search_assets(search="Audio", directory="/Game/Creative", limit=15)` | spawn `…_C` → wire `@editable audio_player_device` **one field per turn** |
+| **Blueprint in level** | Creative device actor | `search_assets(search="Teleporter", directory="/Game/Creative/Devices", limit=10)` or `directory="/Game/Creative"` | Epic `DeviceToolset` `PlaceDevice` first; leftover `spawn_actor(asset_path="…_C", label=…, folder=…)` then `GetDeviceProperties` / `SetDeviceProperty` |
+| **Audio Player** | Gameplay SFX / horns | `search_assets(search="Audio", directory="/Game/Creative", limit=15)` | Epic `PlaceDevice` first; leftover spawn `…_C` → wire `@editable audio_player_device` **one field per turn** |
 | **Verse API type** | `teleporter_device`, `button_device`, `audio_player_device`, … | Digests (below) | `@editable` typing / `get_verse_api` — **never** `spawn_actor(actor_class="teleporter_device")` |
 
 Device folders live under `/Game/Creative/Devices/<Name>/` (Button, Teleporter, CharacterSpawner, CaptureArea, … — 100+ folders). List them:
@@ -130,11 +137,14 @@ Custom project assets in Content Browser (weapons, imported meshes): `search_ass
 ## Golden search → place loop
 
 ```
+0. ducky_get_status — Epic unreal__* when epic_mcp_online
 1. Pick directory from tables above (never /Fortnite)
 2. search_assets(search="<keyword>", directory="…", limit=20, fields=[…])
 3. Pick a BlueprintGeneratedClass path ending in `_C` (the search hit `path` is not spawnable as-is — append `_C`)
 4. get_asset_info / get_actor_bounds after one test spawn if scale is unknown
-5. spawn_actor → set_actor_label → set_actor_folder → snap_actor_to_ground (props)
+5. Creative devices → Epic DeviceToolset PlaceDevice
+   props → Epic ActorTools (5+ → ProgrammaticToolset execute_tool_script)
+   leftovers → spawn_actor(..., label=..., folder=...) → snap_actor_to_ground
 6. take_high_res_screenshot → save_current_level
 ```
 
@@ -142,9 +152,9 @@ If zero hits: broaden keyword **or** step up one folder (e.g. Walls → Building
 
 ## v42.10 additions worth knowing
 
-- **Horror audio:** 166 Audio Control Buses, music, SFX and vocals under `Fortnite > Audio > Horror` — `search_assets(search="Horror", directory="/Game/Audio")` (confirm the mount with `get_project_info`).
-- **Foliage:** `Brimstone_DeadGrass_A`, `Brimstone_DeadShrub_A` in `Fortnite > Environment > Foliage`.
-- **Paintable landscape layer:** `MI_Hera_Grass_Covers_Boreal_A` in `Fortnite > Environment > Materials`.
+- **Horror audio:** 166 Audio Control Buses under Content Drawer Horror — search Creative audio devices, not BR environment meshes.
+- **Foliage:** `search_assets(search="Tree", directory="/Game/Creative/Environments")` then spawn the `…_C` Blueprint (same as Content Drawer drag-drop). Never `spawn_actor` a BakeData `SM_Tree_*` as FortStaticMeshActor.
+- **Paintable landscape layer:** project or Creative materials only — never invent `/Game/Materials`.
 - `CP_Prop_Rock_Wall_Moss` now exposes top-moss colour selection.
 - New Rare/Epic/Legendary **Striker Burst AR** variants for loadouts.
 - Themes: horror → Harrowville set + Horror audio; coastal/beach → Cluster Coast set.
