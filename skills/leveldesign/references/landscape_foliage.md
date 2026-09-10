@@ -71,5 +71,5 @@ If `foliage_list_sources` is empty: `search_assets(search="Tree", directory="/Ga
 - Deterministic `seed` required; report it.
 - Regenerate = `terrain_remove_generated` / `foliage_clear_generated` then rebuild.
 - Budget: resolution ≤ 129; instances ≤ 2500 (default demo ≪ that).
-- Never scale Creative devices. Foliage scale variance is fine on props only.
+- Never scale Fortnite Creative devices (buttons, triggers, volumes, barriers, pads). Actor scale breaks them. Resize via Details Width/Height/zone (`SetDeviceProperty`). Foliage scale variance is fine on props only.
 - Organize under `Generated/WorldgenDemo` and tag `WorldgenGenerated`.

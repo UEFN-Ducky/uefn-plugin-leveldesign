@@ -106,7 +106,8 @@ Three layers, three grids (`snap_actor_to_grid`):
   even reads as designed. Natural: jitter positions and randomize yaw —
   uniform trees read as a plantation, not a forest.
 - Yaw randomization on every organic/scatter prop; scale variance is fine on
-  foliage and rocks, NEVER on Creative devices.
+  foliage and rocks. NEVER actor-scale Fortnite Creative devices — resize
+  volumes/triggers/barriers via Details Width/Height/zone (`SetDeviceProperty`).
 - Budget: dress dense pockets and leave breathing room; uniform 100% coverage
   is worse than 60% clustered.
 

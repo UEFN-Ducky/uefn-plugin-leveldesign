@@ -35,8 +35,7 @@ slivers are peek exploits and light leaks.
 | Damage / kill volumes | Hard OOB punish |
 | Storm / zone devices | Shrinking playable (mode-dependent) |
 
-Inspect real options with Epic `DeviceToolset` `GetDeviceProperties` or `get_all_actors(label_filter=…)`. Barrier size
-is often in **tiles** (1 tile ≈ one grid cell) — confirm on device.
+Inspect real options with Epic `DeviceToolset` `GetDeviceProperties` or `get_all_actors(label_filter=…)`. Barrier / volume / trigger size is a Details property (`Width` / `Height` / `Depth` / zone / tiles) via `SetDeviceProperty` — **never actor Scale** (that breaks Fortnite devices). Barrier size is often in **tiles** (1 tile ≈ one grid cell) — confirm on device.
 
 ## Soft vs hard OOB
 

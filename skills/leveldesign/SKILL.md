@@ -5,7 +5,7 @@ description: "UEFN level design — spatial awareness, blockout, player flow, co
 license: MIT
 metadata:
   label: UEFN Level Design
-  version: 19
+  version: 20
   managed_by: uefn-ducky
   author: UEFN-Ducky
   copyright: Copyright 2026 Mindful Path Company, LLC
@@ -77,7 +77,7 @@ Mode Create is manual-only — AI path is `terrain_generate` via `area_create`.
 | Where DOES it fit near here? | `find_clear_area` (nearest spots first) |
 | How high is the floor? | `get_ground_z` |
 | **New named area / greybox** | `area_list`, `area_create`, `blockout_list_presets`, `blockout_layout` |
-| **Move/arrange** | `set_actor_transform`, `snap_actor_to_ground`, `snap_actor_to_grid`, `align_actors`, `distribute_actors`, `attach_actor`, `duplicate_actor` |
+| **Move/arrange** | `set_actor_transform` (location/rotation on devices; **scale only on props**), `snap_actor_to_ground`, `snap_actor_to_grid`, `align_actors`, `distribute_actors`, `attach_actor`, `duplicate_actor` |
 | **Organize** | `set_actor_label`, `set_actor_folder`, `set_actor_tags` |
 
 ## Fortnite Content Drawer → MCP (Props / Prefabs / Devices)
