@@ -52,6 +52,7 @@ Devices: `PlaceDevice` only. Then `save_current_level`.
 | Themed kits (castle, military, houses…) | `/Game/Creative/Sets/<Theme>` | e.g. `ArtDeco_Bank` floors/walls/stairs (`AD_Bank_*_C`), `GrayBox`, `MilitaryBase` |
 | Prop-set packs | `/Game/Creative/Sets/PropSets` | `Playgrounds`, `Primitives`, … |
 | **Harrowville** (v42.10, horror) | `search_assets(search="Harrowville")` | Floor/Stair/Roof, Wall, Prop, Cliff galleries + `Harrowville House`; pairs with the Harrowville: Environment template |
+| **Stone Sanctum** (v42.20, temple) | `search_assets(search="Stone Sanctum")` | Temple + Floor / Wall / Roof / Prop / Foundation galleries. Place `_C` via `add_to_scene_from_class` |
 | **Cluster Coast** (v42.10, coastal) | `search_assets(search="Cluster Coast")` | Floor, Wall, Roof, Prop galleries + `Duck Yacht`, `Salty Duck` |
 | Trees / hedges | `/Game/Creative/Environments` | `search="Tree"` / `ApolloTrees` / `ApolloHedges` / `AthenaHedges` |
 
@@ -168,4 +169,4 @@ If zero hits: broaden keyword **or** step up one folder (e.g. Walls → Building
 - **Paintable landscape layer:** project or Creative materials only — never invent `/Game/Materials`.
 - `CP_Prop_Rock_Wall_Moss` now exposes top-moss colour selection.
 - New Rare/Epic/Legendary **Striker Burst AR** variants for loadouts.
-- Themes: horror → Harrowville set + Horror audio; coastal/beach → Cluster Coast set.
+- Themes: horror → Harrowville set + Horror audio; temple / stone ruin → Stone Sanctum; coastal/beach → Cluster Coast set.
