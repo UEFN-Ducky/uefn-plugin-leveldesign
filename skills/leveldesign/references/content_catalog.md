@@ -37,6 +37,7 @@ the BlueprintGeneratedClass path) before `spawn_actor(asset_path=…)`, then
 | Floors / sidewalks | `/Game/Creative/BuildingActors/Floors` | `search="Sidewalk"` or `search="CP_"` |
 | Roofs | `/Game/Creative/BuildingActors/Roofs` | `search="Roof"` |
 | Indoor / clutter props | `/Game/Creative/BuildingActors/Props` | `search="Chair"` / `search="Crate"` (huge — keep `limit` small) |
+| Rocks | `/Game/Creative/Environments/Props` | `search="Rock"` — spawn the `_C` Blueprint only |
 | Cliff / nature pieces | `/Game/Creative/Environments/Props` | `search="Cliff"` / `search="Cave"` |
 | Building greebles | `/Game/Creative/Items/Building_Parts` | `search="Ring"` |
 | Themed kits (castle, military, graybox…) | `/Game/Creative/Sets/<Theme>` | e.g. `GrayBox`, `MilitaryBase`, `Spooky`, `PrincessCastle`, `Oak` |
@@ -45,10 +46,11 @@ the BlueprintGeneratedClass path) before `spawn_actor(asset_path=…)`, then
 | **Cluster Coast** (v42.10, coastal) | `search_assets(search="Cluster Coast")` | Floor, Wall, Roof, Prop galleries + `Duck Yacht`, `Salty Duck` |
 | Trees / hedges | `/Game/Creative/Environments` | `search="Tree"` / `ApolloTrees` / `ApolloHedges` / `AthenaHedges` |
 
-Fortnite catalog is **allowed**. Place the Actor Blueprint (`…_C`) Content Drawer
-drag-drop uses — never wrap a `/BakeData/` static mesh in `FortStaticMeshActor`
-(that cook-fails `AssetValidator_AssetReferenceRestrictions`). Prefer
-`/Game/Creative/Environments` for trees (ApolloTrees, hedges). Skip BakeData / HLOD.
+**First pass:** search `/Game/Creative/**` → spawn only `BlueprintGeneratedClass`
+`_C` (Epic ActorTools and leftover `spawn_actor`). Skip `StaticMesh`, `/BakeData/`,
+`/HLOD/`, `SM_*` — page or search again. Epic ActorTools has **no** mesh guard.
+Never spawn a mesh “and fix later”. Trees: `/Game/Creative/Environments`
+(ApolloTrees, hedges) via `foliage_list_sources` → `foliage_scatter(sources=` those `_C` paths).
 
 **Browse folders** (like expanding Content Drawer):
 
@@ -144,7 +146,7 @@ Custom project assets in Content Browser (weapons, imported meshes): `search_ass
 4. get_asset_info / get_actor_bounds after one test spawn if scale is unknown
 5. Creative devices → Epic DeviceToolset PlaceDevice
    props → Epic ActorTools (5+ → ProgrammaticToolset execute_tool_script)
-   leftovers → spawn_actor(..., label=..., folder=...) → snap_actor_to_ground
+   leftovers → spawn_actor(…_C, label=..., folder=...) → snap_actor_to_ground
 6. take_high_res_screenshot → save_current_level
 ```
 
@@ -153,7 +155,7 @@ If zero hits: broaden keyword **or** step up one folder (e.g. Walls → Building
 ## v42.10 additions worth knowing
 
 - **Horror audio:** 166 Audio Control Buses under Content Drawer Horror — search Creative audio devices, not BR environment meshes.
-- **Foliage:** `search_assets(search="Tree", directory="/Game/Creative/Environments")` then spawn the `…_C` Blueprint (same as Content Drawer drag-drop). Never `spawn_actor` a BakeData `SM_Tree_*` as FortStaticMeshActor.
+- **Foliage:** `search_assets(search="Tree", directory="/Game/Creative/Environments")` then spawn only `…_C` Blueprint hits. Skip `StaticMesh` / BakeData / HLOD.
 - **Paintable landscape layer:** project or Creative materials only — never invent `/Game/Materials`.
 - `CP_Prop_Rock_Wall_Moss` now exposes top-moss colour selection.
 - New Rare/Epic/Legendary **Striker Burst AR** variants for loadouts.

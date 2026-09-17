@@ -49,7 +49,7 @@ buried trunks betray the scene; on slopes trust only `get_ground_z` method
 "trace". Uniform spacing reads as a tree farm — jitter positions. Verify
 combat sightlines through trunks with an eye-height (~170 uu) screenshot.
 Mass scattering: `foliage_list_sources` → `foliage_scatter(sources=Content Drawer `_C` paths)`.
-Place like drag-drop — never FortStaticMeshActor on BakeData meshes. See **Procedural generation**.
+Spawn `_C` first pass — skip mesh / BakeData / HLOD hits. See **Procedural generation**.
 
 ### Spaceship / sci-fi station
 

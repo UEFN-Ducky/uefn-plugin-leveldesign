@@ -27,7 +27,7 @@ with `check_area_clear` / `snap_actor_to_ground` / folders.
 
 **B2 — Large greybox (preferred for cities/forests):** after surveying a clear
 footprint, `blockout_layout` / `area_create` / `pcg_generate` / `foliage_scatter`
-with Content Drawer `_C` `sources=` from `foliage_list_sources` (not BakeData static meshes).
+with Content Drawer `_C` `sources=` from `foliage_list_sources` (skip mesh / BakeData / HLOD hits).
 Leftover cubes: serial `spawn_actor(..., label=..., folder=...)` — one per
 assistant message. Never an `execute_python` spawn loop (freezes UEFN).
 

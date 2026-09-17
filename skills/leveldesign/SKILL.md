@@ -5,7 +5,7 @@ description: "UEFN level design — spatial awareness, blockout, player flow, co
 license: MIT
 metadata:
   label: UEFN Level Design
-  version: 20
+  version: 21
   managed_by: uefn-ducky
   author: UEFN-Ducky
   copyright: Copyright 2026 Mindful Path Company, LLC
@@ -35,13 +35,12 @@ Never parallel or same-turn multi — that freezes UEFN. Details:
 `skill_read_subskill("uefn", "batch_commands")`. Gameplay SFX/horns = Creative
 **Audio Player** only (`creative_devices`) — never prop kits for “horn”.
 
-**Place like Content Drawer (HARD):** Fortnite catalog assets are allowed.
-Spawn the Actor Blueprint (`…_C`) drag-drop would place — never
-`spawn_actor_from_object(StaticMesh)` / FortStaticMeshActor wrapping a
-`/BakeData/` mesh (that cook-fails `AssetValidator_AssetReferenceRestrictions`).
-Default trees: `/Game/Creative/Environments` (ApolloTrees, hedges) via
-`foliage_list_sources` → `foliage_scatter(sources=those `_C` paths)`. Skip
-BakeData / HLOD static meshes.
+**Place like Content Drawer (HARD):** search `/Game/Creative/**` → spawn only
+`BlueprintGeneratedClass` paths ending in `_C` (Epic ActorTools and leftover
+`spawn_actor` alike). Skip `StaticMesh`, `/BakeData/`, `/HLOD/`, `SM_*` mesh hits —
+page or search again. Epic ActorTools / ProgrammaticToolset have **no** mesh guard.
+Never spawn a mesh “and fix later”. Trees: `/Game/Creative/Environments`
+(ApolloTrees, hedges) via `foliage_list_sources` → `foliage_scatter(sources=those `_C` paths)`.
 
 The #1 level-design failure is placing blind: guessing coordinates, stacking
 actors inside each other, floating props. These tools give you the spatial

@@ -34,7 +34,8 @@ worldgen_capabilities()
   Create, call `landscape_rename`. Use `landscape_list` / `landscape_get_info` for panels.
 - **Landscape sculpt via Python is a verified NO-OP on visible terrain.** `landscape_export/import_heightmap_from_render_target` exist and the data round-trips (export reads back what import wrote), but importing a full white/max heightmap left the terrain perfectly flat with proxy bounds Z unchanged — even after `force_layers_full_update()`. So `landscape_sculpt` (verify/add/set) writes only a buffer, not geometry. **For AI-sculpted terrain use `terrain_generate` (mesh).** `landscape_sculpt` is retained for parity in case a future engine build composites imports.
 - **Default foliage (`auto`/`actors`)**: Content Drawer Actor Blueprints (`_C`) —
-  the same class drag-drop places. Never FortStaticMeshActor wrapping a BakeData mesh.
+  the same class drag-drop places. Scatter only those `_C` paths. Skip `StaticMesh` /
+  BakeData / HLOD hits — never spawn a mesh “and fix later”.
   HISM often does not render; IFA crashes. Cap actor demos ≤120; `foliage_clear_generated`.
 - **`placement_mode='hism'`**: experimental HISM containers.
 
@@ -53,7 +54,7 @@ terrain_generate({
   level_folder: "Generated/WorldgenDemo"
 })
 foliage_list_sources({search:"tree"})       # Content Drawer `_C` + project
-# MUST pass sources= from that list (`_C` Blueprints, not BakeData SM)
+# MUST pass sources= from that list (`_C` Blueprints only)
 foliage_scatter({
   center, extent, sources:[<paths from foliage_list_sources>], seed:42,
   density_per_100m2: 6, min_distance: 400, max_instances: 120,
@@ -63,7 +64,7 @@ set_viewport_camera + take_high_res_screenshot
 save_current_level()
 ```
 
-If `foliage_list_sources` is empty: `search_assets(search="Tree", directory="/Game/Creative/Environments", limit=20)` and scatter the `…_C` Blueprint paths. Skip BakeData static meshes.
+If `foliage_list_sources` is empty: `search_assets(search="Tree", directory="/Game/Creative/Environments", limit=20)` and scatter the `…_C` Blueprint paths. Skip `StaticMesh` / BakeData / HLOD hits.
 
 ### Hard rules
 
