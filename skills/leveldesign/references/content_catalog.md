@@ -22,10 +22,19 @@ That **Fortnite** tree is a **UI gallery filter**, not a registry path. These al
 
 **Placeable Fortnite Creative content lives under `/Game/Creative/...`.** Always scope `search_assets` / `list_assets` there (or a subfolder below). Param is **`search=`** (not `query` / `name_filter`). Prefer `limit=10..50` + `fields=["asset_name","package_path","asset_class"]` + `offset` to page.
 
-Spawn placeables with a **`.…_C`** class path (`BlueprintGeneratedClass`). The hit's
-`path` is `{package}.{asset}` and is **not** spawnable as-is — append `_C` (or use
-the BlueprintGeneratedClass path) before `spawn_actor(asset_path=…)`, then
-`set_actor_label` + `set_actor_folder` + `save_current_level`.
+**Placeable Fortnite Creative content lives under `/Game/Creative/...`.** Always scope `search_assets` / `list_assets` there (or a subfolder below). Param is **`search=`** (not `query` / `name_filter`). Prefer `limit=10..50` + `fields=["asset_name","package_path","asset_class"]` + `offset` to page. Keep only **`BlueprintGeneratedClass` / `*_C`**.
+
+The hit's `path` is `{package}.{asset}` — append `_C` for the Content Drawer class.
+
+**5+ pieces (HARD):** ProgrammaticToolset `execute_tool_script` →
+`SceneTools.add_to_scene_from_class` with `actor_type.refPath` = that `Package.Asset_C`,
+then `set_actor_folder`. Example house kit:
+`/Game/Creative/Sets/ArtDeco_Bank/BuildingPieces/AD_Bank_Floor.AD_Bank_Floor_C`.
+
+**Never** `add_to_scene_from_asset` on `/Game/Creative` (mesh or not) — that creates
+`FortStaticMeshActor` and fails `AssetValidator_AssetReferenceRestrictions`. Leftover
+single props Epic cannot place: `spawn_actor(asset_path=…_C, label=…, folder=…)`.
+Devices: `PlaceDevice` only. Then `save_current_level`.
 
 ---
 
@@ -37,19 +46,19 @@ the BlueprintGeneratedClass path) before `spawn_actor(asset_path=…)`, then
 | Floors / sidewalks | `/Game/Creative/BuildingActors/Floors` | `search="Sidewalk"` or `search="CP_"` |
 | Roofs | `/Game/Creative/BuildingActors/Roofs` | `search="Roof"` |
 | Indoor / clutter props | `/Game/Creative/BuildingActors/Props` | `search="Chair"` / `search="Crate"` (huge — keep `limit` small) |
-| Rocks | `/Game/Creative/Environments/Props` | `search="Rock"` — spawn the `_C` Blueprint only |
+| Rocks | `/Game/Creative/BuildingActors/Props` | `search="Rock"` — prop `_C` only (e.g. `CP_Prop_Artemis_Desert_MedRock_01_C`). Never `Environments/.../Meshes` |
 | Cliff / nature pieces | `/Game/Creative/Environments/Props` | `search="Cliff"` / `search="Cave"` |
 | Building greebles | `/Game/Creative/Items/Building_Parts` | `search="Ring"` |
-| Themed kits (castle, military, graybox…) | `/Game/Creative/Sets/<Theme>` | e.g. `GrayBox`, `MilitaryBase`, `Spooky`, `PrincessCastle`, `Oak` |
+| Themed kits (castle, military, houses…) | `/Game/Creative/Sets/<Theme>` | e.g. `ArtDeco_Bank` floors/walls/stairs (`AD_Bank_*_C`), `GrayBox`, `MilitaryBase` |
 | Prop-set packs | `/Game/Creative/Sets/PropSets` | `Playgrounds`, `Primitives`, … |
 | **Harrowville** (v42.10, horror) | `search_assets(search="Harrowville")` | Floor/Stair/Roof, Wall, Prop, Cliff galleries + `Harrowville House`; pairs with the Harrowville: Environment template |
 | **Cluster Coast** (v42.10, coastal) | `search_assets(search="Cluster Coast")` | Floor, Wall, Roof, Prop galleries + `Duck Yacht`, `Salty Duck` |
 | Trees / hedges | `/Game/Creative/Environments` | `search="Tree"` / `ApolloTrees` / `ApolloHedges` / `AthenaHedges` |
 
-**First pass:** search `/Game/Creative/**` → spawn only `BlueprintGeneratedClass`
-`_C` (Epic ActorTools and leftover `spawn_actor`). Skip `StaticMesh`, `/BakeData/`,
-`/HLOD/`, `SM_*` — page or search again. Epic ActorTools has **no** mesh guard.
-Never spawn a mesh “and fix later”. Trees: `/Game/Creative/Environments`
+**First pass:** search `/Game/Creative/**` → keep only `BlueprintGeneratedClass` `_C`.
+Place with `add_to_scene_from_class` (batch) or leftover `spawn_actor(…_C)`. Skip
+`StaticMesh`, `/BakeData/`, `/HLOD/`, `SM_*`, `…/Meshes/` — page or search again.
+**Never** `add_to_scene_from_asset`. Trees: `/Game/Creative/Environments`
 (ApolloTrees, hedges) via `foliage_list_sources` → `foliage_scatter(sources=` those `_C` paths).
 
 **Browse folders** (like expanding Content Drawer):
@@ -80,7 +89,7 @@ Workflow for a themed kit:
 list_assets(directory="/Game/Creative/Sets", recursive=false, limit=50)   # pick theme
 search_assets(search="GrayBox", directory="/Game/Creative/Sets/GrayBox", limit=30,
               fields=["asset_name","package_path","asset_class"])
-# spawn only BlueprintGeneratedClass …_C hits
+# keep BlueprintGeneratedClass …_C — add_to_scene_from_class, never from_asset
 ```
 
 ---

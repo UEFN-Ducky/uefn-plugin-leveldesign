@@ -5,7 +5,7 @@ description: "UEFN level design — spatial awareness, blockout, player flow, co
 license: MIT
 metadata:
   label: UEFN Level Design
-  version: 21
+  version: 22
   managed_by: uefn-ducky
   author: UEFN-Ducky
   copyright: Copyright 2026 Mindful Path Company, LLC
@@ -35,12 +35,16 @@ Never parallel or same-turn multi — that freezes UEFN. Details:
 `skill_read_subskill("uefn", "batch_commands")`. Gameplay SFX/horns = Creative
 **Audio Player** only (`creative_devices`) — never prop kits for “horn”.
 
-**Place like Content Drawer (HARD):** search `/Game/Creative/**` → spawn only
-`BlueprintGeneratedClass` paths ending in `_C` (Epic ActorTools and leftover
-`spawn_actor` alike). Skip `StaticMesh`, `/BakeData/`, `/HLOD/`, `SM_*` mesh hits —
-page or search again. Epic ActorTools / ProgrammaticToolset have **no** mesh guard.
-Never spawn a mesh “and fix later”. Trees: `/Game/Creative/Environments`
-(ApolloTrees, hedges) via `foliage_list_sources` → `foliage_scatter(sources=those `_C` paths)`.
+**Place like Content Drawer (HARD):** search `/Game/Creative/**` → keep only
+`BlueprintGeneratedClass` / `*_C`. **5+ Fortnite pieces** → ProgrammaticToolset
+`execute_tool_script` → `editor_toolset.toolsets.scene.SceneTools.add_to_scene_from_class`
+with `actor_type.refPath` = full `Package.Asset_C`, then `set_actor_folder`.
+**Never** `add_to_scene_from_asset` for `/Game/Creative` — that spawns
+`FortStaticMeshActor` and cook-fails `AssetValidator_AssetReferenceRestrictions`.
+Devices → `ValkyrieToolset.DeviceToolset.PlaceDevice` (location + yaw, no Scale).
+Skip `StaticMesh`, `/BakeData/`, `/HLOD/`, `SM_*`, `…/Meshes/`. Leftover
+`spawn_actor(asset_path=…_C, label=…, folder=…)` only for props Epic cannot place.
+Trees: `foliage_list_sources` → `foliage_scatter(sources=those `_C` paths)`.
 
 The #1 level-design failure is placing blind: guessing coordinates, stacking
 actors inside each other, floating props. These tools give you the spatial
