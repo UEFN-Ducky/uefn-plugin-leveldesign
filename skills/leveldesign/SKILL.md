@@ -5,7 +5,7 @@ description: "UEFN level design — spatial awareness, blockout, player flow, co
 license: MIT
 metadata:
   label: UEFN Level Design
-  version: 23
+  version: 24
   managed_by: uefn-ducky
   author: UEFN-Ducky
   copyright: Copyright 2026 Mindful Path Company, LLC
@@ -32,7 +32,7 @@ other options were “exhausted”. The listener refuses spawn/move/material scr
 **CRITICAL — editor mutations are SERIAL:** one heavy MCP call (`unreal__call_tool`,
 `spawn_actor`, `wire_*`, `set_actor_*`, `save_current_level`) → wait → next.
 Never parallel or same-turn multi — that freezes UEFN. Details:
-`skill_read_subskill("uefn", "batch_commands")`. Gameplay SFX/horns = Creative
+SERIAL: one mutating/editor call per assistant message.. Gameplay SFX/horns = Creative
 **Audio Player** only (`creative_devices`) — never prop kits for “horn”.
 
 **Place like Content Drawer (HARD):** search `/Game/Creative/**` → keep only
@@ -150,7 +150,7 @@ editor ops, or the layout tools, then serial `spawn_actor` only for leftovers:
 ```
 
 Folder under `Areas/<id>/…` or `Blockout/…`. One editor mutator per assistant
-message (`skill_read_subskill("uefn", "batch_commands")`).
+message (SERIAL: one mutating/editor call per assistant message.).
 
 Notes:
 
@@ -236,3 +236,7 @@ Load with `skill_read_subskill("leveldesign", "<id>")`:
 | `lighting` | Sun/sky/local lights, Day Sequence (stars → materials `starfield_recipe`) |
 | `procedural_generation` | PCG / seeded mass placement |
 | `landscape_foliage` | Terrain + foliage scatter |
+
+## Verify
+
+`take_high_res_screenshot` of the placed area. Never leave layout unverified.

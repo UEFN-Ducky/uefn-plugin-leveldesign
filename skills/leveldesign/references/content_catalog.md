@@ -7,8 +7,6 @@ metadata:
   load_condition: "User asks to place props, walls, floors, prefabs, galleries, Creative devices, browse Content Drawer / Fortnite catalog, or find what Fortnite assets exist to build with"
 ---
 
-**Tool order (HARD):** 1) Official UEFN MCP first (`ducky_get_status` → `epic_mcp_online` → nested `unreal__*`). 2) Ducky listener second. 3) `execute_python` LAST — never a placement path, even if Epic and listener failed. Map: `skill_read_subskill("uefn", "epic_mcp")`.
-
 ## Content Drawer ≠ asset mount
 
 In the editor UI: **Content Drawer → All → Fortnite → Props / Prefabs / Devices**.
@@ -100,7 +98,7 @@ search_assets(search="GrayBox", directory="/Game/Creative/Sets/GrayBox", limit=3
 Two layers — never confuse them.
 
 **SERIAL:** place/wire one MCP call at a time —
-`skill_read_subskill("uefn", "batch_commands")`.
+SERIAL: one mutating/editor call per assistant message..
 
 **Sound / horn / SFX / alarms:** search **Devices** for Creative **Audio Player**
 (`search_assets(search="Audio", directory="/Game/Creative")`) — never prop kits

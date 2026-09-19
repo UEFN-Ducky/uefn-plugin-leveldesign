@@ -7,8 +7,6 @@ metadata:
   load_condition: "User asks for landscape, terrain, heightmap, foliage, vegetation, forest scatter, biome, or sculpted ground without placing individual tree assets"
 ---
 
-**Tool order (HARD):** 1) Official UEFN MCP first (`ducky_get_status` → `epic_mcp_online` → nested `unreal__*`). 2) Ducky listener second. 3) `execute_python` LAST — never a placement path, even if Epic and listener failed. Map: `skill_read_subskill("uefn", "epic_mcp")`.
-
 ## Landscape & foliage — worldgen tools
 
 UEFN-Ducky can **form terrain** and **scatter vegetation as instances**, but foliage

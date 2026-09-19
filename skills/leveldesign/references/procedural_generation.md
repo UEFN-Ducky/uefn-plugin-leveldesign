@@ -7,8 +7,6 @@ metadata:
   load_condition: "User asks for procedural/PCG generation, scattering many props, random layouts, mazes, dungeons, forests, or generated arenas"
 ---
 
-**Tool order (HARD):** 1) Official UEFN MCP first (`ducky_get_status` → `epic_mcp_online` → nested `unreal__*`). 2) Ducky listener second. 3) `execute_python` LAST — never a placement path, even if Epic and listener failed. Map: `skill_read_subskill("uefn", "epic_mcp")`.
-
 ## Procedural generation — two routes
 
 ### Route A: PCG graphs (when a graph already exists)
