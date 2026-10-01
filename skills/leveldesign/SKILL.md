@@ -5,7 +5,7 @@ description: "UEFN level design — spatial awareness, blockout, player flow, co
 license: MIT
 metadata:
   label: UEFN Level Design
-  version: 24
+  version: 25
   managed_by: uefn-ducky
   author: UEFN-Ducky
   copyright: Copyright 2026 Mindful Path Company, LLC

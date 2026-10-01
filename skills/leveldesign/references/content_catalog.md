@@ -168,3 +168,17 @@ If zero hits: broaden keyword **or** step up one folder (e.g. Walls → Building
 - `CP_Prop_Rock_Wall_Moss` now exposes top-moss colour selection.
 - New Rare/Epic/Legendary **Striker Burst AR** variants for loadouts.
 - Themes: horror → Harrowville set + Horror audio; temple / stone ruin → Stone Sanctum; coastal/beach → Cluster Coast set.
+
+## New in 42.30
+
+| Content | Kind | Verse / catalog name |
+| --- | --- | --- |
+| **Lavish Lair Set** | Prefabs & galleries | In the editor: Content Browser → Fortnite → Prefabs / Galleries, search "Lavish Lair". Its asset name is not indexed under "Lavish" or "Lair" in the 42.30 registry, so browse the Prefabs/Galleries folders and place the `*_C` you find there |
+| **Witch Broom** (Ch6S4) | Item | `WitchBroom_BR_CH6S4_Epic` (`/Fortnite.com/Items`) |
+| **Slap Candy Corn** | Consumable (applies Slap) | `SlapCandyCorn_BR_CH7S4_Exotic` (`/Fortnite.com/Items`) |
+| **Easy Ride Pumpkin Launcher** | Exotic weapon | `EasyRidePumpkinLauncher_BR_CH7S4_Exotic` (`/Fortnite.com/Weapons`) |
+
+Grant items/weapons with `Inventory.AddItemDistribute(WitchBroom_BR_CH6S4_Epic{})`
+(scenegraph `itemization`). Racing: Rocket Racing *template* islands were
+unpublished in 42.30; build tracks with the Track Spline Tool, Boost Pads, Volume
+Hazards and vehicle spawners on a normal island (uefn `creative_devices`).

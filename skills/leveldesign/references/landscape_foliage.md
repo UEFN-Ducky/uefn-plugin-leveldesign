@@ -72,3 +72,16 @@ If `foliage_list_sources` is empty: `search_assets(search="Tree", directory="/Ga
 - Budget: resolution ≤ 129; instances ≤ 2500 (default demo ≪ that).
 - Never scale Fortnite Creative devices (buttons, triggers, volumes, barriers, pads). Actor scale breaks them. Resize via Details Width/Height/zone (`SetDeviceProperty`). Foliage scale variance is fine on props only.
 - Organize under `Generated/WorldgenDemo` and tag `WorldgenGenerated`.
+
+## 42.30 landscape changes
+
+- **WaterBodyIsland** now exposes **Affects Landscape** — turn it off so the island
+  stops overwriting your sculpting.
+- Paint mode **Layer Allow List**: the cursor and target-layer indicator show
+  add-to / remove-from allow list.
+- A grass-name clash on fallback fixup is now a log warning plus a **Map Check**
+  warning with an action to force-rebuild landscape grass data (it used to assert).
+- Landscape shortcut keys (comma, period, Escape) no longer fire while typing in a text box.
+- Crashes fixed: brush stroke starting in a deleted region (steep angles), loading old
+  landscapes without edit layers, right-clicking a landscape proxy.
+- RVT Texture Sample material node now has the same color as a Texture Sample.
